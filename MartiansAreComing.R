@@ -11,45 +11,51 @@ ufo <- read.csv("ufo_subset.csv")
 
 # renaming columns which had spaces 
 ufo <- ufo %>% 
-  rename(durationSeconds = duration..seconds., durationHoursMin = duration..hours.min., date = date.posted)
-
-
-# Clean up the rows that do not have Country or Shape information
-ufo1 <- ufo %>% 
-  filter(country != "", shape != "")
-
-
-# Convert Datetime and Date_posted columns into appropriate formats
-ufo2 <- ufo1 %>% 
-  mutate(datetime = gsub(" .*", "", datetime))
-
-# NUFORC officials comment on sightings that may be hoax. Figure out a way (go through the Comments and decide how a proper filter should look like) and remove these sightings from the dataset.
-ufo3 <- ufo2 %>% 
-  filter(!grepl("HOAX", comments, ignore.case = T))
-
-# Add another column to the dataset (report_delay) and populate with the time difference in days, between the date of the sighting and the date it was reported.
-ufo4 <- ufo3 %>% 
-  mutate(report_delay = as.Date(date) - as.Date(datetime))
-
-# Filter out the rows where the sighting was reported before it happened.
-ufo5 <- ufo4 %>% 
+  rename(durationSeconds = duration..seconds., 
+         durationHoursMin = duration..hours.min.,
+         date = date.posted) %>% 
+  # Clean up the rows that do not have Country or Shape information
+  filter(country != "", shape != "") %>% 
+  # Convert Datetime and Date_posted columns into appropriate formats
+  mutate(datetime = gsub(" .*", "", datetime)) %>% 
+  # NUFORC officials comment on sightings that may be hoax. Figure out a 
+  # way (go through the Comments and decide how a proper filter should look like) 
+  # and remove these sightings from the dataset.
+  filter(!grepl("HOAX", comments, ignore.case = T)) %>%
+  # Add another column to the dataset (report_delay) and populate with the 
+  # time difference in days, between the date of the sighting and the date it was reported.
+  mutate(report_delay = as.Date(date) - as.Date(datetime)) %>% 
+  # Filter out the rows where the sighting was reported before it happened.
   mutate(numericDelay = as.numeric(gsub("([0-9]+).*$", "\\1", report_delay))) %>% 
   filter(report_delay >= 0)
 
 # Create a table with the average report_delay per country.
-ufo6 <- ufo5 %>% 
+ufoSummary <- ufo %>% 
   group_by(country) %>%
   summarise(mean(report_delay))
 
-# Check the data quality (missingness, format, range etc) of the duration(seconds) column. Explain what kinds of problems you have identified and how you chose to deal with them, in your comments.
-range(ufo5$durationSeconds)
-str(ufo5$durationSeconds)
-sum(is.na(ufo5$durationSeconds))
-sum(ufo5$durationSeconds == "")
+# Check the data quality (missingness, format, range etc) of the 
+# duration(seconds) column. Explain what kinds of problems you have identified 
+# and how you chose to deal with them, in your comments.
+
+  ## checking range of seconds.  0.02 - 52623200.00
+range(ufo$durationSeconds)
+
+  ## checking structure of duration seconds
+str(ufo$durationSeconds)
+
+  ## Checking to see number of Nas: 0 
+sum(is.na(ufo$durationSeconds))
+
+  ## Checking to see number of blanks: 0 
+sum(ufo$durationSeconds == "")
+
+# what is wrong with it ? 
+
 
 # Create a histogram using the duration(seconds) column.
-
-
+hist(log(ufo$durationSeconds), main = "Log of UFO duration in seconds", 
+     xlab = "Log(Duration in Seconds)", col = "blue")
 
 
 
