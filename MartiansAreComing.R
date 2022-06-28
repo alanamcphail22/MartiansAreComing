@@ -9,8 +9,9 @@ library(ggplot2)
 # Read the data into a dataframe (check to make sure that column names do not have spaces in them)
 ufo <- read.csv("ufo_subset.csv")
 
-# renaming columns which had spaces 
+
 ufo <- ufo %>% 
+  # renaming columns which had spaces 
   rename(durationSeconds = duration..seconds., 
          durationHoursMin = duration..hours.min.,
          date = date.posted) %>% 
@@ -27,7 +28,7 @@ ufo <- ufo %>%
   mutate(report_delay = as.Date(date) - as.Date(datetime)) %>% 
   # Filter out the rows where the sighting was reported before it happened.
   mutate(numericDelay = as.numeric(gsub("([0-9]+).*$", "\\1", report_delay))) %>% 
-  filter(report_delay >= 0)
+  filter(numericDelay >= 0)
 
 # Create a table with the average report_delay per country.
 ufoSummary <- ufo %>% 
@@ -55,7 +56,7 @@ ufo$durationSeconds <- format(round(ufo$durationSeconds), nsmall = 2)
 
 
 # Create a histogram using the duration(seconds) column.
-hist(log(ufo$durationSeconds), main = "Log of UFO duration in seconds", 
+hist(log(as.numeric(ufo$durationSeconds)), main = "Log of UFO duration in seconds", 
      xlab = "Log(Duration in Seconds)", col = "blue")
 
 
