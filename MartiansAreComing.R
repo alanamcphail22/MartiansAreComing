@@ -50,7 +50,8 @@ sum(is.na(ufo$durationSeconds))
   ## Checking to see number of blanks: 0 
 sum(ufo$durationSeconds == "")
 
-# what is wrong with it ? 
+# Some values have a decimal, others do not! Making the duration second column all have 2 decimals. 
+ufo$durationSeconds <- format(round(ufo$durationSeconds), nsmall = 2)
 
 
 # Create a histogram using the duration(seconds) column.
