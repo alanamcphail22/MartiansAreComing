@@ -7,7 +7,7 @@ library(dplyr)
 library(ggplot2)
 
 # Read the data into a dataframe (check to make sure that column names do not have spaces in them)
-ufo <- read.csv("/Users/AshleyNamini/Documents/MBiotech/MSC2011/Assignments/Assignment4-Ashley-/ufo_subset.csv")
+ufo <- read.csv("~/Documents/MBiotech/MSC2011/Assignments/Assignment4-Ashley-/ufo_subset.csv")
 
 #' it is useful to create copies of the original dataset when modifying it so you can be sure to
 #' retain the original dataset  
@@ -30,6 +30,7 @@ ufo_final <- ufo %>%
   # time difference in days, between the date of the sighting and the date it was reported.
   mutate(report_delay = as.Date(datePosted) - as.Date(datetime)) %>% 
   # Filter out the rows where the sighting was reported before it happened.
+  # it is not necessary to convert to numeric since it is a double
   mutate(numericDelay = as.numeric(gsub("([0-9]+).*$", "\\1", report_delay))) %>% 
   filter(numericDelay >= 0)
 
@@ -55,7 +56,7 @@ sum(is.na(ufo_final$durationSeconds))
 sum(ufo_final$durationSeconds == "")
 
 # Some values have a decimal, others do not! Making the duration second column all have 2 decimals. 
-ufo_final$durationSeconds <- format(round(ufo$durationSeconds), nsmall = 2)
+ufo_final$durationSeconds <- format(round(ufo_final$durationSeconds), nsmall = 2)
 
 
 # Create a histogram using the duration(seconds) column.
@@ -63,7 +64,10 @@ hist(log(as.numeric(ufo_final$durationSeconds)), main = "Log of UFO duration in 
      xlab = "Log(Duration in Seconds)", col = "blue")
 
 
-
+#' Ashley review: Code was really well commented and the variable names were variable 
+#' readable. This made the code very easy to follow. The code functioned as expected and 
+#' was able to run from source without any errors. 
+ 
 
 
 
