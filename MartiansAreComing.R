@@ -7,10 +7,11 @@ library(dplyr)
 library(ggplot2)
 
 # Read the data into a dataframe (check to make sure that column names do not have spaces in them)
-ufo <- read.csv("ufo_subset.csv")
+ufo <- read.csv("/Users/AshleyNamini/Documents/MBiotech/MSC2011/Assignments/Assignment4-Ashley-/ufo_subset.csv")
 
-
-ufo <- ufo %>% 
+#' it is useful to create copies of the original dataset when modifying it so you can be sure to
+#' retain the original dataset  
+ufo_final <- ufo %>% 
   # renaming columns which had spaces 
   rename(durationSeconds = duration..seconds., 
          durationHoursMin = duration..hours.min.,
