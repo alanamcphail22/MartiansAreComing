@@ -28,7 +28,7 @@ ufo_final <- ufo %>%
   filter(!grepl("HOAX", comments, ignore.case = T)) %>%
   # Add another column to the dataset (report_delay) and populate with the 
   # time difference in days, between the date of the sighting and the date it was reported.
-  mutate(report_delay = as.Date(date) - as.Date(datetime)) %>% 
+  mutate(report_delay = as.Date(datePosted) - as.Date(datetime)) %>% 
   # Filter out the rows where the sighting was reported before it happened.
   mutate(numericDelay = as.numeric(gsub("([0-9]+).*$", "\\1", report_delay))) %>% 
   filter(numericDelay >= 0)
