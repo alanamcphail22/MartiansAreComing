@@ -34,7 +34,7 @@ ufo_final <- ufo %>%
   filter(numericDelay >= 0)
 
 # Create a table with the average report_delay per country.
-ufoSummary <- ufo %>% 
+ufoSummary <- ufo_final %>% 
   group_by(country) %>%
   summarise(mean(report_delay))
 
@@ -43,23 +43,23 @@ ufoSummary <- ufo %>%
 # and how you chose to deal with them, in your comments.
 
   ## checking range of seconds.  0.02 - 52623200.00
-range(ufo$durationSeconds)
+range(ufo_final$durationSeconds)
 
   ## checking structure of duration seconds
-str(ufo$durationSeconds)
+str(ufo_final$durationSeconds)
 
   ## Checking to see number of Nas: 0 
-sum(is.na(ufo$durationSeconds))
+sum(is.na(ufo_final$durationSeconds))
 
   ## Checking to see number of blanks: 0 
-sum(ufo$durationSeconds == "")
+sum(ufo_final$durationSeconds == "")
 
 # Some values have a decimal, others do not! Making the duration second column all have 2 decimals. 
-ufo$durationSeconds <- format(round(ufo$durationSeconds), nsmall = 2)
+ufo_final$durationSeconds <- format(round(ufo$durationSeconds), nsmall = 2)
 
 
 # Create a histogram using the duration(seconds) column.
-hist(log(as.numeric(ufo$durationSeconds)), main = "Log of UFO duration in seconds", 
+hist(log(as.numeric(ufo_final$durationSeconds)), main = "Log of UFO duration in seconds", 
      xlab = "Log(Duration in Seconds)", col = "blue")
 
 
