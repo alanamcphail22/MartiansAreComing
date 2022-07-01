@@ -15,7 +15,9 @@ ufo_final <- ufo %>%
   # renaming columns which had spaces 
   rename(durationSeconds = duration..seconds., 
          durationHoursMin = duration..hours.min.,
-         date = date.posted) %>% 
+         #' perhaps can rename date.posted as datePosted to keep it consistent and easier to remember
+         #' which column in the original dataset this new name corresponds to
+         datePosted = date.posted) %>% 
   # Clean up the rows that do not have Country or Shape information
   filter(country != "", shape != "") %>% 
   # Convert Datetime and Date_posted columns into appropriate formats
